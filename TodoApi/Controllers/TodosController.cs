@@ -26,27 +26,84 @@ namespace TodoApi.Controllers
 
         // GET api/<TodosController>/5
         [HttpGet("{id}")]
-        public TodoModel? Get(int id)
+        public ActionResult<IEnumerable<TodoModel>> Get(int id)
         {
-            return context.Todos.FirstOrDefault(t => t.Id == id);
+            TodoModel? providedTodo = context.Todos.FirstOrDefault(t => t.Id == id);
+
+            if (providedTodo != null)
+            {
+                return Ok(providedTodo);
+            }
+            else
+            {
+                return NotFound("The provided id number doesn't exist in the database!");
+            }
         }
 
         // POST api/<TodosController>
         [HttpPost]
         public IActionResult Post([FromBody] TodoModel todo)
         {
+            List<TodoModel> todos = context.Todos.ToList();
+            TodoModel? providedTodo = todos.FirstOrDefault(t => t.Description.ToLower() == todo.Description.Trim().ToLower());
+
+            if (providedTodo == null)
+            {
+                context.Todos.Add(todo);
+
+                context.SaveChanges();
+
+                return Ok();
+            }
+            else
+            {
+                return NotFound("The provided todo description already exists in the database!");
+            }
         }
 
-        // PUT api/<TodosController>/5
+        //// PUT api/<TodosController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public IActionResult Put(int id, [FromBody] TodoModel todo)
         {
+            List<TodoModel> todos = context.Todos.ToList();
+            TodoModel? providedTodo = todos.FirstOrDefault(t => t.Id == id);
+
+            if (providedTodo != null)
+            {
+                providedTodo.Description = todo.Description;
+
+                providedTodo.Completed = todo.Completed;
+
+                context.Todos.Update(providedTodo);
+
+                context.SaveChanges();
+
+                return Ok();
+            }
+            else
+            {
+                return NotFound("The provided id number doesn't exist in the database!");
+            }
         }
 
         // DELETE api/<TodosController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public ActionResult<IEnumerable<TodoModel>> Delete(int id)
         {
+            TodoModel? providedTodo = context.Todos.FirstOrDefault(t => t.Id == id);
+
+            if (providedTodo != null)
+            {
+                context.Todos.Remove(providedTodo);
+
+                context.SaveChanges();
+
+                return Ok();
+            }
+            else
+            {
+                return NotFound("The provided id number doesn't exist in the database!");
+            }
         }
     }
 }
