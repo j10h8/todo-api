@@ -26,9 +26,9 @@ namespace TodoApi.Controllers
 
         // GET api/<TodosController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public TodoModel? Get(int id)
         {
-            return "value";
+            return context.Todos.FirstOrDefault(t => t.Id == id);
         }
 
         // POST api/<TodosController>
