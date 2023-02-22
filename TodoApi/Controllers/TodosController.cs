@@ -53,7 +53,7 @@ namespace TodoApi.Controllers
 
                 context.SaveChanges();
 
-                return Ok();
+                return Ok(todo);
             }
             else
             {
