@@ -57,7 +57,7 @@ namespace TodoApi.Controllers
             }
             else
             {
-                return NotFound("The provided todo description already exists in the database!");
+                return BadRequest("The provided todo description already exists in the database!");
             }
         }
 
