@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TodoApi.Data;
+using TodoApi.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -18,9 +19,9 @@ namespace TodoApi.Controllers
 
         // GET: api/<TodosController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public ActionResult<IEnumerable<TodoModel>> Get()
         {
-            return new string[] { "value1", "value2" };
+            return Ok(context.Todos.ToList());
         }
 
         // GET api/<TodosController>/5
